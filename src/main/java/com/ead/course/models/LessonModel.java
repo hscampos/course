@@ -23,7 +23,7 @@ public class LessonModel   implements Serializable {
     private UUID lessonId;
 
     @Column(nullable = false, length = 150)
-    private String title;
+    private String tittle;
 
     @Column(nullable = false, length = 250)
     private String description;

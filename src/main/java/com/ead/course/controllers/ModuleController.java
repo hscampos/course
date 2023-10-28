@@ -65,7 +65,7 @@ public class ModuleController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found!");
         }
         ModuleModel moduleModel = moduleModelOptional.get();
-        moduleModel.setTitle(moduleDto.getTittle());
+        moduleModel.setTittle(moduleDto.getTittle());
         moduleModel.setDescription(moduleDto.getDescription());
         return ResponseEntity.status(HttpStatus.OK).body(moduleService.save(moduleModel));
     }

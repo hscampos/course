@@ -49,11 +49,11 @@ public class LessonController {
         return ResponseEntity.status(HttpStatus.CREATED).body(lessonService.save(lessonModel));
     }
 
-    @DeleteMapping("/modules/{moduleId}/lesson{lessonId}")
+    @DeleteMapping("/modules/{moduleId}/lesson/{lessonId}")
     public ResponseEntity<Object> deleteLesson(@PathVariable(value = "moduleId")UUID moduleId,
                                                @PathVariable(value = "lessonId")UUID lessonId){
 
-        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
+        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(lessonId, moduleId);
         if(lessonModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found!");
         }
@@ -61,17 +61,17 @@ public class LessonController {
         return ResponseEntity.status(HttpStatus.OK).body("Lesson deleted successfully!");
     }
 
-    @PutMapping("/modules/{moduleId}/lesson{lessonId}")
-    public ResponseEntity<Object> updateLesson(@PathVariable(value = "moduleId")UUID courseId,
-                                               @PathVariable(value = "lessonId")UUID moduleId,
+    @PutMapping("/modules/{moduleId}/lesson/{lessonId}")
+    public ResponseEntity<Object> updateLesson(@PathVariable(value = "moduleId")UUID moduleId,
+                                               @PathVariable(value = "lessonId")UUID lessonId,
                                                @RequestBody @Valid LessonDto lessonDto){
 
-        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(courseId, moduleId);
+        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(lessonId, moduleId);
         if(lessonModelOptional.isEmpty()){
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Course not found!");
         }
         LessonModel lessonModel = lessonModelOptional.get();
-        lessonModel.setTitle(lessonDto.getTittle());
+        lessonModel.setTittle(lessonDto.getTittle());
         lessonModel.setDescription(lessonDto.getDescription());
         lessonModel.setVideoUrl(lessonDto.getVideoUrl());
 
@@ -83,10 +83,10 @@ public class LessonController {
         return ResponseEntity.status(HttpStatus.OK).body(lessonService.findAllByModuleId(moduleId));
     }
 
-    @GetMapping("/modules/{moduleId}/lesson{lessonId}")
+    @GetMapping("/modules/{moduleId}/lesson/{lessonId}")
     public ResponseEntity<Object> getOneLesson(@PathVariable(value = "moduleId")UUID moduleId,
                                                @PathVariable(value = "lessonId")UUID lessonId){
-        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(moduleId, lessonId);
+        Optional<LessonModel> lessonModelOptional = lessonService.findLessonIntoModule(lessonId, moduleId);
         return lessonModelOptional.<ResponseEntity<Object>>map(lessonModel -> ResponseEntity.status(HttpStatus.OK).body(lessonModel))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("Lesson not found!"));
     }
